@@ -1,0 +1,1 @@
+const nextConfig = { poweredByHeader: false, async headers(){return [{source:'/:path*',headers:[{key:'Content-Security-Policy',value:"font-src 'self'; object-src 'none'; base-uri 'self'"}]}]} }; export default nextConfig;

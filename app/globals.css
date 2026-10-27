@@ -1,0 +1,299 @@
+@font-face{font-family:"ONY Track";src:url("/fonts/ONYTrack-UltraCondensedBlack.4328c6d0.ttf") format("truetype");font-weight:900;font-style:normal;font-display:block}
+@font-face{font-family:"Luckies";src:url("/fonts/Luckies.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block}
+@tailwind base;@tailwind components;@tailwind utilities;
+:root{--bg:#070b09;--text:#d4d9cf;--muted:#839080;--line:#b8c2ad26;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}html{font-family:"ONY Track";font-synthesis:none;scroll-behavior:smooth;scroll-padding-top:120px}body{margin:0;background:var(--bg);color:var(--text);font-family:"ONY Track";font-size:14px;-webkit-font-smoothing:antialiased}::selection{background:#6d8261;color:#fff}a{color:inherit;text-decoration:none}button,input,select,textarea,code{font:inherit;color:inherit}button{cursor:pointer}a,button{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible{outline:1px solid #a8bb99;outline-offset:7px}h1,h2,h3,p{margin:0}h1,h2,h3{font-family:"ONY Track";font-weight:900;line-height:.98}b,strong{font-weight:400}img{display:block;max-width:100%}.container{width:calc(100% - 128px);max-width:1536px;margin-inline:auto}.eyebrow{display:flex;align-items:center;gap:10px;font-size:11px;line-height:1.6;letter-spacing:.03em;color:#94a08d}.luckies{font-family:"Luckies";font-weight:400;font-synthesis:none}.button{display:inline-flex;align-items:center;gap:35px;padding:17px 23px;border:1px solid #90a17c55;font-size:13px;transition:background 1.8s,color 1.8s}.button:hover{background:#abb99b;color:#10170d}
+.header{height:96px;padding-inline:48px;display:flex;align-items:center;justify-content:space-between;position:fixed;z-index:50;inset:0 0 auto;background:linear-gradient(#070b09e6,#070b0999);backdrop-filter:blur(16px);border-bottom:1px solid #b8c2ad0c}.brand{display:flex;align-items:center;gap:13px}.brand>img{width:28px;height:39px;object-fit:contain}.brand>span{font-family:"ONY Track";font-size:29px;letter-spacing:.8px;line-height:1}.brand.small>img{width:29px;height:41px}.nav{display:flex;align-items:center;gap:29px}.nav>a{position:relative;color:#818d7d;font-size:12px;transition:color .65s}.nav>a.active,.nav>a:hover{color:#e2e9d8}.mobile-toggle{display:none;background:none;border:0;padding:8px}
+/* The grain never replaces text or captures interaction. Exposure changes are
+   low-contrast and slow, without high-frequency full-screen flashes. */
+.film-grain{position:fixed;inset:-120px;z-index:70;pointer-events:none;background:url('/images/film-grain.png') repeat;background-size:170px 170px;mix-blend-mode:soft-light;opacity:.19;animation:grain-drift 13s steps(7,end) infinite;will-change:transform}
+.film-exposure{position:fixed;inset:0;background:#000;z-index:69;pointer-events:none;opacity:.02;animation:film-breath 17s ease-in-out infinite}
+@keyframes grain-drift{0%,100%{transform:translate(0,0)}17%{transform:translate(-24px,18px)}34%{transform:translate(17px,-31px)}51%{transform:translate(-39px,-13px)}68%{transform:translate(28px,33px)}85%{transform:translate(-12px,42px)}}
+@keyframes film-breath{0%,18%,36%,67%,100%{opacity:.015}25%{opacity:.065}30%{opacity:.025}52%{opacity:.085}59%{opacity:.035}81%{opacity:.06}92%{opacity:.025}}
+
+/* A sparse opening: only owner-approved brand and navigation. */
+.cinema-hero{height:900px;min-height:770px;position:relative;isolation:isolate;overflow:hidden}.cinema-landscape{position:absolute;inset:0;background:url('/images/atmosphere.jpg') center 60%/cover;opacity:.52;animation:landscape-drift 35s ease-out forwards;z-index:-4;filter:saturate(.35)}.cinema-vignette{position:absolute;inset:0;z-index:-3;background:linear-gradient(0deg,#070b09,transparent 40%,#070b0910 80%),radial-gradient(ellipse at 50% 44%,transparent 0%,#070b0955 55%,#070b09dd 100%)}.hero-grid{position:absolute;inset:96px 64px 80px;z-index:-2;border-inline:1px solid #afc2ac0a}.cinema-center{display:flex;align-items:center;flex-direction:column;padding-top:150px;position:relative}.hero-intro{font-size:10px;color:#819078;animation:label-light 1.05s .15s ease-in-out both}.hero-emblem{width:105px;height:144px;margin-top:52px;margin-bottom:42px;animation:logo-light 1.45s ease-in-out both}.hero-emblem img{width:100%;height:100%;object-fit:contain;filter:saturate(.7) brightness(.8)}.cinema-center h1.luckies{font-size:clamp(80px,12.8vw,210px);line-height:1.1;letter-spacing:-.055em;color:#d0d7c8;font-weight:400;max-width:95%;animation:none;text-shadow:0 0 40px #b9d19c09}.hero-roster-link{display:flex;align-items:center;gap:30px;margin-top:53px;padding-bottom:13px;border-bottom:1px solid #8ca47b55;font-size:12px;color:#a7b89b;animation:label-light .9s .65s ease-in-out both;transition:color .65s}.hero-roster-link:hover{color:#e4efda}.hero-bottom{position:absolute;bottom:36px;left:64px;right:64px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#6b7b62}.hero-bottom a{padding:10px;color:#a1b491}.hero-bottom>span{flex:1}.hero-bottom>span:last-child{text-align:right}.confirmed-roster{padding-block:85px;border-top:1px solid var(--line)}.collection-title{font-size:clamp(60px,7vw,112px);margin-bottom:40px;color:#b4c0a9;letter-spacing:.01em}.photo-grid{display:grid;gap:22px}.home-five{grid-template-columns:repeat(5,1fr);gap:15px}.academy-three{grid-template-columns:repeat(3,1fr)}.portrait-card{display:block;min-width:0}.portrait-frame{height:370px;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 65%,#3e4b3429,transparent 75%),#0c120e;border:1px solid #afc2ac15;transition:border-color .9s}.portrait-frame:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#070b09 0%,transparent 35%,#070b0910 75%)}.portrait-image-motion>img{width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:grayscale(.9) brightness(.74) contrast(1.08);transform:scale(1.01);transition:filter 1.1s var(--ease),transform 1.3s var(--ease);padding-top:35px}.portrait-card:hover .portrait-image-motion>img{filter:grayscale(.25) brightness(.9) contrast(1.04);transform:scale(1.035)}.portrait-card:hover .portrait-frame{border-color:#9aae7d55}.portrait-caption{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-top:20px}.portrait-caption h2{font-size:clamp(30px,3vw,47px);color:#becbb0;letter-spacing:.02em}.portrait-caption>span{font-size:9px;color:#657a58}.home-five .portrait-caption>span{display:none}.home-five .portrait-frame{height:310px}.academy-preview{padding-bottom:110px}.academy-three .portrait-frame{height:420px}
+.page-title{padding-top:172px;padding-bottom:55px}.page-title h1{font-size:clamp(90px,11vw,176px);line-height:1;letter-spacing:.01em}.page-description{margin-top:30px;font-size:13px;line-height:1.9;color:#8a9d7b}.tabs{display:flex;gap:35px;border-bottom:1px solid var(--line);margin-bottom:40px}.tabs button{position:relative;isolation:isolate;border:0;background:none;padding:0 0 19px;font-size:13px;color:#6e845e;transition:color .65s}.tabs button.active{color:#b9cfa4}.tab-bg{position:absolute;bottom:-1px;left:0;right:0;height:1px;background:#b9cfa4;z-index:-1}.roster-gallery{grid-template-columns:repeat(3,1fr);padding-bottom:100px;gap:45px 28px}.roster-gallery .portrait-frame{height:430px}.empty-section{border-top:1px solid var(--line);min-height:43vh;display:flex;align-items:flex-start;padding-top:55px;gap:25px;color:#839a74;font-size:14px}.empty-dash{width:25px;height:1px;background:#7a9468;display:block;margin-top:9px}.club-minimal{min-height:48vh;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding-block:55px}.club-minimal img{width:130px;filter:saturate(.6) brightness(.8)}.portrait-profile{padding-top:140px;padding-bottom:80px}.back-link{display:inline-flex;align-items:center;gap:13px;color:#91a67d;font-size:13px;margin-bottom:25px}.profile-stage{min-height:650px;position:relative;display:grid;grid-template-columns:1fr 1fr;align-items:center;border-top:1px solid var(--line)}.profile-photo{height:650px;position:relative;background:radial-gradient(ellipse at 50% 70%,#52643a22,transparent 68%)}.profile-photo img{width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:grayscale(.75) brightness(.8);padding-top:30px}.profile-photo:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#070b09,transparent 23%)}.profile-name{padding-left:50px}.profile-name .eyebrow{font-size:10px}.profile-name h1{font-size:clamp(60px,8.5vw,140px);line-height:1.05;margin-top:25px;overflow-wrap:anywhere}.next-player{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:25px;color:#859b72;font-size:12px}.next-player span{display:flex;gap:25px;align-items:center;color:#b7c7a6}.quiet-footer{padding-block:40px;border-top:1px solid var(--line);background:#060a07}.quiet-footer>.container{display:flex;align-items:center;justify-content:space-between;gap:35px}.footer-links{display:flex;gap:28px;font-size:12px;color:#869b75}.quiet-footer>.container>span{font-size:10px;color:#5e7350}.not-found{padding:200px 20px 150px;text-align:center}.not-found h1{font-size:80px;margin:30px 0 40px}
+@keyframes emerge{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes landscape-drift{from{transform:scale(1)}to{transform:scale(1.045)}}
+.route-enter{opacity:1}
+@keyframes route-enter{from{opacity:0}to{opacity:1}}
+html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}.lenis.lenis-stopped{overflow:hidden}.lenis.lenis-smooth iframe{pointer-events:none}
+html[data-effects="off"] .film-grain{animation:none;opacity:.08}html[data-effects="off"] .film-exposure{display:none}html[data-effects="off"] *,html[data-effects="off"] *:before,html[data-effects="off"] *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media(min-width:1800px){.header{padding-inline:max(64px,calc((100vw - 1536px)/2))}.cinema-hero{height:1030px}.cinema-center{padding-top:180px}.hero-emblem{width:130px;height:178px}.hero-bottom{left:max(64px,calc((100vw - 1536px)/2));right:max(64px,calc((100vw - 1536px)/2))}.hero-grid{left:max(64px,calc((100vw - 1536px)/2));right:max(64px,calc((100vw - 1536px)/2))}}
+@media(max-width:1100px){.container{width:calc(100% - 72px)}.header{padding-inline:30px}.nav{gap:24px}.nav>a{font-size:11px}.brand>span{font-size:25px}.hero-grid{left:36px;right:36px}.hero-bottom{left:36px;right:36px}.home-five .portrait-frame{height:245px}.portrait-caption h2{font-size:34px}.roster-gallery .portrait-frame{height:360px}.profile-name{padding-left:25px}.profile-name h1{font-size:82px}.quiet-footer>.container{gap:25px}.footer-links{gap:20px}.quiet-footer>.container>span{display:none}}
+@media(max-width:760px){.container{width:calc(100% - 40px)}.header{height:80px;padding-inline:20px;gap:15px}.brand>img{width:23px;height:32px}.brand>span{font-size:26px}.mobile-toggle{display:block;padding-right:0}.nav{display:none;position:absolute;top:80px;left:0;right:0;background:#090f0bfa;padding:35px 25px;flex-direction:column;gap:28px;border-bottom:1px solid var(--line)}.nav.open{display:flex}.nav>a{font-size:14px}.cinema-hero{height:780px;min-height:700px}.cinema-center{padding-top:147px}.hero-intro{font-size:9px}.hero-emblem{width:92px;height:126px;margin-top:58px;margin-bottom:50px}.cinema-center h1.luckies{font-size:clamp(55px,12.5vw,90px);letter-spacing:-.055em;max-width:94%}.hero-roster-link{margin-top:50px;font-size:12px}.hero-grid{inset:80px 20px 75px}.hero-bottom{left:20px;right:20px;bottom:25px;font-size:9px}.hero-bottom a{padding:8px}.film-grain{background-size:140px 140px;opacity:.16}.confirmed-roster{padding-block:50px}.collection-title{font-size:62px;margin-bottom:30px}.home-five{grid-template-columns:1fr 1fr;gap:30px 14px}.home-five .portrait-frame{height:260px}.home-five .portrait-card:last-child{grid-column:1/-1;max-width:65%;width:100%;justify-self:center}.home-five .portrait-card:last-child .portrait-frame{height:300px}.portrait-image-motion>img{padding-top:25px}.portrait-caption{padding-top:14px;gap:6px}.portrait-caption h2{font-size:35px}.portrait-caption>span{font-size:8px}.academy-three{grid-template-columns:1fr;gap:35px}.academy-three .portrait-frame{height:380px}.academy-preview{padding-bottom:65px}.page-title{padding-top:135px;padding-bottom:42px}.page-title h1{font-size:clamp(72px,18vw,120px)}.tabs{gap:28px;margin-bottom:30px}.tabs button{font-size:12px}.roster-gallery{grid-template-columns:1fr 1fr;gap:30px 14px;padding-bottom:65px}.roster-gallery .portrait-frame{height:270px}.roster-gallery.academy-three{grid-template-columns:1fr 1fr}.roster-gallery .portrait-caption{flex-wrap:wrap}.roster-gallery .portrait-caption>span{display:none}.empty-section{padding-top:35px;min-height:43vh;font-size:13px;gap:20px}.club-minimal{min-height:45vh}.club-minimal img{width:115px}.portrait-profile{padding-top:112px;padding-bottom:55px}.profile-stage{grid-template-columns:1fr;min-height:0}.profile-photo{height:460px;order:2}.profile-name{padding:30px 0 0;order:1}.profile-name h1{font-size:80px;margin-top:20px}.profile-name .eyebrow{font-size:9px}.next-player{font-size:11px;gap:15px}.quiet-footer{padding-block:30px}.quiet-footer>.container{flex-wrap:wrap;gap:25px}.footer-links{flex-wrap:wrap;gap:20px;font-size:11px}.quiet-footer>.container>.brand{width:100%}.not-found h1{font-size:60px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.film-exposure{display:none}.film-grain{opacity:.08}}
+/* Luckies has unusually narrow native advances (ROOSTERZ ≈ 1.05 em).
+   Use its real metrics at monumental size, without stretching or negative tracking. */
+.cinema-center{padding-top:135px}.hero-emblem{width:73px;height:100px;margin-top:32px;margin-bottom:26px}
+.cinema-center h1.luckies{font-size:clamp(360px,40vw,650px);line-height:.74;letter-spacing:.008em}
+.hero-roster-link{margin-top:48px}
+@media(min-width:1800px){.cinema-center{padding-top:150px}.hero-emblem{width:88px;height:121px;margin-top:42px;margin-bottom:35px}}
+@media(max-width:760px){.cinema-center{padding-top:145px}.hero-emblem{width:80px;height:110px;margin-top:40px;margin-bottom:45px}.cinema-center h1.luckies{font-size:clamp(245px,66vw,370px);line-height:.76;letter-spacing:.008em}.hero-roster-link{margin-top:55px}}
+
+
+/* Distinct motion roles. No glyph splitting, no blur on readable text. */
+.text-width{display:inline-block;font:inherit;letter-spacing:inherit;transform:scaleX(.88);transform-origin:left center}
+.text-hero{transform:scaleX(.88);transform-origin:center center}
+.text-motion{display:inline-block;font:inherit;letter-spacing:inherit;opacity:0}
+.text-hero .text-motion{mask-image:linear-gradient(to bottom,#000 0%,#000 45%,transparent 68%,transparent 100%);mask-size:100% 260%;mask-position:0 100%;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 45%,transparent 68%,transparent 100%);-webkit-mask-size:100% 260%;-webkit-mask-position:0 100%}
+.text-hero .text-ready{animation:hero-veil 1.65s var(--text-delay,0s) cubic-bezier(.33,0,.2,1) both}
+.text-title .text-ready{animation:title-settle 1.15s var(--text-delay,0s) cubic-bezier(.22,.6,.25,1) both}
+.text-section .text-ready{animation:section-light 1.35s var(--text-delay,0s) ease-in-out both}
+.text-profile .text-ready{animation:profile-arrive 1.3s var(--text-delay,0s) cubic-bezier(.22,.6,.25,1) both}
+@keyframes hero-veil{from{opacity:0;mask-position:0 100%;-webkit-mask-position:0 100%}to{opacity:1;mask-position:0 0;-webkit-mask-position:0 0}}
+@keyframes title-settle{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes section-light{from{opacity:0}to{opacity:1}}
+@keyframes profile-arrive{from{opacity:0;transform:translate3d(10px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes label-light{from{opacity:0}to{opacity:1}}
+@keyframes logo-light{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.portrait-image-motion{width:100%;height:100%;opacity:0;transform:translate3d(0,9px,0) scale(1.025);transition:opacity 1.25s cubic-bezier(.3,0,.25,1),transform 1.65s cubic-bezier(.22,.6,.25,1);transition-delay:var(--portrait-delay,0s)}
+.portrait-ready .portrait-image-motion{opacity:1;transform:translate3d(0,0,0) scale(1)}
+.portrait-caption{opacity:0;transition:opacity .8s ease-in-out;transition-delay:calc(var(--portrait-delay,0s) + .2s)}
+.portrait-ready .portrait-caption{opacity:1}
+.portrait-caption h2{transform:scaleX(.88);transform-origin:left center;letter-spacing:0;text-transform:uppercase;transition:color .8s}
+.portrait-card:hover .portrait-caption h2{color:#e0e9d6}
+.brand>span{transform:scaleX(.92);transform-origin:left center;letter-spacing:0}
+.nav>a,.eyebrow,.hero-roster-link,.tabs button,.back-link,.footer-links{letter-spacing:-.015em}
+.next-player span{text-transform:uppercase}
+.profile-photo img{animation:portrait-light 1.5s cubic-bezier(.3,0,.25,1) both}
+@keyframes portrait-light{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero-roster-link{position:relative;border-bottom:0}
+.hero-roster-link:after{content:"";position:absolute;bottom:0;left:0;width:100%;height:1px;background:#8ca47b77;transform:scaleX(.45);transform-origin:left;transition:transform .8s var(--ease)}
+.hero-roster-link:hover:after,.hero-roster-link:focus-visible:after{transform:scaleX(1)}
+.hero-roster-link svg{transition:transform .8s var(--ease)}
+.hero-roster-link:hover svg{transform:translate(2px,-2px)}
+.text-static,html[data-effects="off"] .text-motion{opacity:1!important;transform:none!important;mask-image:none!important;-webkit-mask-image:none!important;animation:none!important}
+.portrait-static .portrait-image-motion,.portrait-static .portrait-caption,html[data-effects="off"] .portrait-image-motion,html[data-effects="off"] .portrait-caption{opacity:1!important;transform:none!important}
+@media(prefers-reduced-motion:reduce){.text-motion{opacity:1!important;transform:none!important;mask-image:none!important;-webkit-mask-image:none!important;animation:none!important}.portrait-image-motion,.portrait-caption{opacity:1!important;transform:none!important}}
+/* Luckies glyph ascenders extend above its tight line box. Give the soft mask
+   transparent breathing room so the complete letterforms remain intact. */
+.text-hero .text-motion{padding:.12em .025em;margin:-.12em -.025em}
+
+/* Two supplied fonts only: Luckies for the hero, UltraCondensed everywhere else. */
+html,body{font-family:"ONY Track";font-weight:900}
+body{font-size:21px}
+.nav>a{font-size:23px;letter-spacing:.015em}
+.footer-links{font-size:21px;gap:30px}
+.tabs button{font-size:24px;letter-spacing:.01em}
+.hero-roster-link{font-size:23px;letter-spacing:.02em}
+.back-link,.next-player{font-size:22px}
+.button,.empty-section{font-size:23px}
+/* Open portraits, not framed cards: only the supplied picture and nickname. */
+.portrait-card,.portrait-frame,.portrait-card:hover .portrait-frame{border:0!important;outline-offset:6px;background:transparent;box-shadow:none}
+.portrait-frame:after{background:linear-gradient(0deg,#070b09 0%,transparent 23%)}
+.portrait-caption{display:block;padding-top:16px}
+.portrait-caption h2{font-size:clamp(34px,3.2vw,50px)}
+.profile-stage,.confirmed-roster{border:0}
+.hero-bottom{justify-content:center}
+.page-title{padding-bottom:55px}
+.mobile-toggle{margin-left:auto}
+@media(max-width:760px){
+.nav>a{font-size:25px}
+.footer-links{font-size:22px;gap:22px}
+.tabs button{font-size:24px}
+.hero-roster-link{font-size:23px}
+.back-link,.next-player,.empty-section{font-size:21px}
+.portrait-caption h2{font-size:38px}
+}
+/* Luckies now anchors roster typography as well as the opening wordmark.
+   Its narrow native metrics need a much larger font-size, not horizontal stretching. */
+.collection-title{font-family:"Luckies";font-weight:400;font-size:clamp(150px,14vw,225px);line-height:1;letter-spacing:.005em;margin-bottom:30px}
+.collection-title .text-width{transform:none}
+.portrait-caption{padding-top:20px;text-align:center}
+.portrait-caption h2{font-family:"Luckies";font-weight:400;font-size:clamp(96px,8vw,125px);line-height:1;letter-spacing:.005em;transform:none;transform-origin:center;white-space:nowrap;color:#c8d1bf}
+.profile-name h1{font-family:"Luckies";font-weight:400;font-size:clamp(200px,25vw,380px);line-height:1;letter-spacing:.005em;margin-top:0}
+.profile-name h1 .text-width{transform:none}
+@media(max-width:1100px){.portrait-caption h2{font-size:96px}.profile-name h1{font-size:220px}}
+@media(max-width:760px){
+.collection-title{font-size:clamp(135px,35vw,200px);line-height:1;margin-bottom:25px}
+.portrait-caption{padding-top:14px}
+.portrait-caption h2{font-size:clamp(88px,23vw,110px);line-height:1;letter-spacing:0}
+.profile-name h1{font-size:clamp(180px,48vw,260px);line-height:1}
+}
+/* Home roster captions use UltraCondensed; individual profiles retain Luckies. */
+.confirmed-roster .portrait-caption h2{font-family:"ONY Track";font-weight:900;font-size:clamp(36px,4vw,58px);line-height:1;letter-spacing:0}
+@media(max-width:760px){.confirmed-roster .portrait-caption h2{font-size:clamp(34px,9.5vw,44px)}}
+/* The full roster gallery now lives on the homepage. */
+.home-roster-section{position:relative;padding-bottom:0}
+.home-roster-section .tabs{margin-bottom:40px}
+.home-roster-section .roster-gallery{padding-bottom:85px}
+.roster-anchor{position:absolute;top:0;left:0;scroll-margin-top:120px;pointer-events:none}
+@media(max-width:760px){.home-roster-section .tabs{margin-bottom:30px}.home-roster-section .roster-gallery{padding-bottom:55px}.roster-anchor{scroll-margin-top:100px}}
+
+/* Centered navigation, no active dot. Active state uses text color only. */
+@media(min-width:761px){.header .nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}}
+.nav>a.active:before{content:none!important;display:none!important}
+/* Luckies captions: a consistent tall baseline centered under each portrait. */
+.confirmed-roster .portrait-caption{padding-top:22px;text-align:center}
+.confirmed-roster .portrait-caption h2{font-family:"Luckies";font-weight:400;font-size:clamp(105px,9vw,145px);line-height:1;letter-spacing:.012em;color:#c5ceba;transform:none}
+@media(max-width:760px){.confirmed-roster .portrait-caption{padding-top:15px}.confirmed-roster .portrait-caption h2{font-size:clamp(90px,25vw,115px);letter-spacing:.006em}}
+/* One active roster exists in SSR and at first paint. Cards own in/out motion. */
+.roster-viewport{overflow:hidden;position:relative;overflow-anchor:none}
+.roster-slide{display:flow-root}
+.roster-slide .portrait-image-motion,.roster-slide .portrait-caption{opacity:1;transition:none}
+@media(prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+
+/* No separator rules or underline indicators; active labels use color only. */
+.header,.nav,.tabs,.confirmed-roster,.quiet-footer,.profile-stage,.next-player,.empty-section,.club-minimal{border:0!important}
+.hero-grid{border:0!important}
+.tabs .tab-bg,.empty-dash{display:none!important}
+.hero-roster-link:after{display:none}
+.tabs button{transition:color .35s}
+.tabs button.active{color:#e0e8d6}
+
+/* Page chrome never moves. Only local text/image targets are masked in/out. */
+main{transform:none}
+.page-title h1{text-transform:none}
+/* The viewport is sized before the second panel mounts: no initial double roster. */
+.roster-track{will-change:transform}
+.roster-slide[inert]{pointer-events:none}
+.roster-slide .portrait-image-motion,.roster-slide .portrait-caption{opacity:1;transform:none;transition:none}
+
+
+/* Only text travels. Its own line box is the clipping window; the page,
+   background, navigation, photographs and footer are not animated. */
+.route-copy{display:inline-block}
+
+/* Native App Router navigation; only individual text entrances animate. */
+.text-title{clip-path:inset(-.18em -.1em)}
+.text-title .text-ready{animation:title-rise .85s var(--text-delay,0s) cubic-bezier(.22,.6,.25,1) both}
+.title-about .text-title .text-ready{animation:title-uncover 1.05s var(--text-delay,0s) cubic-bezier(.22,.6,.25,1) both}
+.title-contact .text-title .text-ready{animation:title-drop .9s var(--text-delay,0s) cubic-bezier(.22,.6,.25,1) both}
+.text-profile{clip-path:inset(-.18em -.1em)}
+.text-profile .text-ready{animation:profile-slide 1s var(--text-delay,0s) cubic-bezier(.22,.6,.25,1) both}
+.route-copy{animation:copy-uncover 1.1s .18s cubic-bezier(.22,.6,.25,1) both}
+@keyframes title-rise{from{opacity:1;transform:translateY(115%)}to{opacity:1;transform:translateY(0)}}
+@keyframes title-uncover{from{opacity:1;clip-path:inset(-20% 100% -20% 0);transform:translateX(-18px)}to{opacity:1;clip-path:inset(-20% 0 -20% 0);transform:translateX(0)}}
+@keyframes title-drop{from{opacity:1;transform:translateY(-115%)}to{opacity:1;transform:translateY(0)}}
+@keyframes profile-slide{from{opacity:1;transform:translateX(35%);clip-path:inset(-20% 0 -20% 100%)}to{opacity:1;transform:translateX(0);clip-path:inset(-20% 0 -20% 0)}}
+@keyframes copy-uncover{from{clip-path:inset(0 0 100% 0);transform:translateY(8px)}to{clip-path:inset(0);transform:translateY(0)}}
+html[data-effects="off"] .route-copy{animation:none!important}
+@media(prefers-reduced-motion:reduce){.route-copy{animation:none!important}}
+
+/* Profile-only entrances: longer settling, short travel and staggered text. */
+.profile-photo img{animation:profile-photo-in 1.9s .04s cubic-bezier(.4,0,.25,1) both}
+.text-profile .text-ready{animation:profile-name-in 1.8s .14s cubic-bezier(.4,0,.25,1) both}
+.portrait-profile .back-link{animation:copy-uncover 1s .05s cubic-bezier(.16,1,.3,1) both}
+.portrait-profile .next-player{animation:copy-uncover 1.2s .3s cubic-bezier(.16,1,.3,1) both}
+@keyframes profile-photo-in{from{clip-path:inset(0 0 100% 0);transform:translateY(18px)}to{clip-path:inset(0);transform:translateY(0)}}
+@keyframes profile-name-in{from{opacity:1;transform:translateX(22px);clip-path:inset(-20% 100% -20% 0)}to{opacity:1;transform:translateX(0);clip-path:inset(-20% 0 -20% 0)}}
+html[data-effects="off"] .portrait-profile *{animation:none!important}
+
+/* Destination of a profile exit: local masks, never a moving page wrapper. */
+.profile-arrival .portrait-card,
+.profile-arrival .collection-title,
+.profile-arrival .tabs,
+.profile-arrival .cinema-center,
+.profile-arrival .page-title,
+.profile-arrival .empty-section,
+.profile-arrival .club-minimal{animation:profile-destination-in 1.05s .04s cubic-bezier(.22,.65,.25,1) both}
+.profile-arrival .portrait-card:nth-child(3n+2){animation-delay:.11s}
+.profile-arrival .portrait-card:nth-child(3n){animation-delay:.18s}
+@keyframes profile-destination-in{from{clip-path:inset(100% -.2em 0 -.2em)}to{clip-path:inset(-.2em -.2em -.2em -.2em)}}
+
+/* Independent glow layer follows profile exit without fading the portrait. */
+.profile-photo{background:none}
+.profile-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 70%,#52643a22,transparent 68%)}
+.profile-photo img{position:relative}
+
+/* Hide only the scrollbar, never disable page scrolling. */
+html,body{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0}
+html.lenis,html.lenis body{height:auto}
+html.lenis.lenis-smooth{scroll-behavior:auto!important}
+.profile-photo:after{content:none}
+.profile-veil{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#070b09,transparent 23%)}
+
+/* Official mark as a restrained, oversized backdrop to the home wordmark. */
+.cinema-center{min-height:760px;padding-top:80px;justify-content:center;isolation:isolate}
+.cinema-center .hero-emblem{position:absolute;z-index:-1;top:50%;left:50%;width:440px;height:560px;margin:0;transform:translate(-50%,-50%) rotate(-12deg);opacity:.16;animation:none;pointer-events:none}
+.hero-emblem img{width:100%;height:100%;object-fit:contain;filter:grayscale(.65) saturate(.35) brightness(.8)}
+.cinema-center h1.luckies{position:relative;z-index:1}
+.cinema-center .hero-roster-link{position:relative;z-index:1;margin-top:45px}
+@media(max-width:760px){.cinema-center{min-height:650px;padding-top:60px}.cinema-center .hero-emblem{width:300px;height:420px;opacity:.14}.cinema-center .hero-roster-link{margin-top:40px}}
+
+.header-wordmark{display:inline-block;font-family:"Luckies";font-size:48px;font-weight:400;line-height:1;letter-spacing:.01em;white-space:nowrap}
+@media(max-width:760px){.header-wordmark{font-size:40px}}
+
+.header-brand{display:inline-flex;align-items:center;gap:12px;white-space:nowrap;color:#fff}
+.header-brand img{width:28px;height:39px;object-fit:contain;filter:brightness(0) invert(1)}
+.header-brand>span{font-family:"ONY Track";font-weight:900;font-size:30px;line-height:1;letter-spacing:0}
+@media(max-width:760px){.header-brand{gap:10px}.header-brand img{width:24px;height:34px}.header-brand>span{font-size:27px}}
+
+.header-brand{color:#d0d7c8}
+.header-brand .header-brand-mark{display:block;flex:none;width:28px;height:39px;background:currentColor;mask:url('/images/roosterz-mark.png') center/contain no-repeat;-webkit-mask:url('/images/roosterz-mark.png') center/contain no-repeat}
+@media(max-width:760px){.header-brand .header-brand-mark{width:24px;height:34px}}
+
+/* Align the header wordmark optically with navigation labels. */
+.header-brand{position:relative;top:5px}
+
+/* Seamless footer and a gradual entrance for the portrait lighting. */
+.quiet-footer{background:transparent;border:0!important;box-shadow:none}
+.profile-glow{animation:profile-glow-in 1.9s .04s cubic-bezier(.4,0,.25,1) both}
+.profile-veil{animation:profile-glow-in 1.3s cubic-bezier(.25,.65,.3,1) both}
+@keyframes profile-glow-in{from{opacity:0}to{opacity:1}}
+
+/* Reading text keeps the arrow cursor; interactive controls stay recognizable. */
+body{cursor:default}
+a,button,[role="button"],[role="tab"],summary{cursor:pointer}
+input,textarea,[contenteditable="true"]{cursor:text}
+button:disabled,[aria-disabled="true"]{cursor:default}
+
+/* First visit: prepare local type and first-screen imagery before revealing content. */
+.boot-loading .boot-content,.boot-error .boot-content{visibility:hidden}
+.boot-loading .boot-content *,.boot-error .boot-content *{animation-play-state:paused!important}
+.boot-screen{position:fixed;inset:0;z-index:200;background:#070b09;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#d0d7c8}
+.boot-mark{width:180px;height:230px;background:currentColor;opacity:.22;mask:url('/images/roosterz-mark.png') center/contain no-repeat;-webkit-mask:url('/images/roosterz-mark.png') center/contain no-repeat}
+.boot-label{font-family:'Luckies';font-size:68px;line-height:1;margin-top:-65px;z-index:1}
+.boot-track{width:150px;height:2px;background:#d0d7c81a;overflow:hidden;margin-top:36px}
+.boot-track span{display:block;width:45%;height:100%;background:#a7b89b;animation:boot-travel 1.4s ease-in-out infinite}
+.boot-screen p{font-size:18px;color:#829078;margin:20px 24px;text-align:center;letter-spacing:.04em}
+.boot-screen button{background:transparent;border:1px solid #829078;padding:12px 24px;font-size:22px}
+.boot-opening .boot-screen{animation:boot-open .65s cubic-bezier(.4,0,.2,1) both;pointer-events:none}
+@keyframes boot-travel{from{transform:translateX(-110%)}to{transform:translateX(330%)}}
+@keyframes boot-open{from{clip-path:inset(0)}to{clip-path:inset(0 0 100% 0)}}
+.status-page{position:relative;isolation:isolate;min-height:85vh;padding:160px 24px 90px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;overflow:hidden}
+.status-mark{position:absolute;inset:20% 10%;z-index:-1;background:#d0d7c8;opacity:.06;mask:url('/images/roosterz-mark.png') center/contain no-repeat;-webkit-mask:url('/images/roosterz-mark.png') center/contain no-repeat}
+.status-code{font-family:'Luckies';font-size:clamp(130px,22vw,260px);line-height:.95;color:#d0d7c8}
+.status-page h1{font-size:clamp(40px,6vw,72px);margin:22px 0}
+.status-page p{font-size:24px;color:#829078;margin:0 0 32px;max-width:500px}
+.status-actions{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}.status-actions button{background:transparent}
+.route-loading{min-height:75vh;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#d0d7c8}
+@media(prefers-reduced-motion:reduce){.boot-opening .boot-screen{display:none}.boot-track span{width:100%}}
+
+/* Minimal startup: monumental typography, no loading chrome. */
+.boot-word-window{max-width:94vw;padding:.12em .025em;overflow:hidden}
+.boot-word{font-family:'Luckies';font-weight:400;font-size:clamp(170px,40vw,650px);line-height:.85;letter-spacing:.008em;color:#d0d7c8;white-space:nowrap;animation:boot-word-breathe 2.4s ease-in-out infinite}
+@keyframes boot-word-breathe{0%,100%{opacity:.65}50%{opacity:1}}
+.boot-opening .boot-word{animation:boot-word-exit .6s cubic-bezier(.4,0,.25,1) both}
+@keyframes boot-word-exit{from{transform:translateY(0)}to{transform:translateY(-120%)}}
+@media(max-width:760px){.boot-word{font-size:clamp(170px,66vw,400px)}}
+
+/* Startup shares the homepage photograph; only the ellipsis animates. */
+.boot-screen{isolation:isolate;background:#070b09}
+.boot-screen::before{content:"";position:absolute;inset:0;z-index:-2;background:url('/images/atmosphere.jpg') center 60%/cover;opacity:.52;filter:saturate(.35)}
+.boot-screen::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#070b09,transparent 40%,#070b0910 80%),radial-gradient(ellipse at 50% 44%,transparent 0%,#070b0955 55%,#070b09dd 100%);pointer-events:none}
+.boot-word{animation:none;font-size:clamp(140px,32vw,500px)}
+.boot-dots{display:inline-flex}
+.boot-dots>span{animation:boot-dot 1.2s ease-in-out infinite;opacity:.2}
+.boot-dots>span:nth-child(2){animation-delay:.2s}
+.boot-dots>span:nth-child(3){animation-delay:.4s}
+@keyframes boot-dot{0%,70%,100%{opacity:.2}35%{opacity:1}}
+@media(max-width:760px){.boot-word{font-size:clamp(140px,55vw,340px)}}
+@media(prefers-reduced-motion:reduce){.boot-dots>span{opacity:1}}
+
+/* Identical image crop and vignette geometry across loader and homepage. */
+:root{--hero-scene-height:900px}
+@media(min-width:1800px){:root{--hero-scene-height:1030px}}
+@media(max-width:760px){:root{--hero-scene-height:780px}}
+.cinema-hero{height:var(--hero-scene-height)}
+.boot-screen{overflow:hidden}
+.boot-screen::before,.boot-screen::after{inset:0 0 auto;height:var(--hero-scene-height)}
+.boot-opening .cinema-landscape{animation-play-state:paused!important}
+
+.header .mobile-toggle{margin-left:auto}
+
+/* The back control stays visually stable during player-to-player navigation. */
+main[data-back-static="true"] .portrait-profile .back-link{animation:none!important;opacity:1;transform:none;clip-path:none}
