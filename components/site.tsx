@@ -11,6 +11,7 @@ export {useCinematicMotion} from './motion-context';
 export function Logo({small=false}:{small?:boolean}){return <span className={'brand '+(small?'small':'')}><img src="/images/roosterz-mark.png" alt=""/>{!small&&<span>ROOSTERZ</span>}</span>}
 const nav=[['/','Главная'],['/matches','Матчи'],['/about','О клубе'],['/contact','Контакты']];
 export function Shell({children}:{children:React.ReactNode}){
+ const pendingAnchor=useRef<string|null>(null);
  const scrollEngine=useRef<Lenis|null>(null);
  const router=useRouter();const leaving=useRef(false);const exits=useRef<Animation[]>([]);
  const [arrival,setArrival]=useState<string|null>(null);
@@ -21,8 +22,13 @@ export function Shell({children}:{children:React.ReactNode}){
  useEffect(()=>{document.documentElement.dataset.effects=active?'on':'off'},[active]);
  useEffect(()=>{if(!active)return;const lenis=new Lenis({duration:1.545,smoothWheel:true,wheelMultiplier:.85});scrollEngine.current=lenis;let id:number;function raf(t:number){lenis.raf(t);id=requestAnimationFrame(raf)}id=requestAnimationFrame(raf);return()=>{cancelAnimationFrame(id);lenis.destroy();scrollEngine.current=null}},[active]);
  useLayoutEffect(()=>{
+  const hash=pendingAnchor.current||window.location.hash.slice(1);
+  if(hash==='academy'||hash==='roster'){
+   try{sessionStorage.setItem('roosterz-tab',hash==='academy'?'1':'0')}catch{}
+   window.dispatchEvent(new Event('roster-select'));
+   if(location.hash)history.replaceState(history.state,'',location.pathname+location.search);
+  }
   const reset=()=>{
-   const hash=window.location.hash.slice(1);
    let anchor:HTMLElement|null=null;
    try{anchor=hash?document.getElementById(decodeURIComponent(hash)):null}catch{}
    const top=anchor?Math.max(0,anchor.getBoundingClientRect().top+window.scrollY-120):0;
@@ -32,7 +38,7 @@ export function Shell({children}:{children:React.ReactNode}){
    window.scrollTo({top,left:0,behavior:'instant'});
   };
   reset();
-  const frame=requestAnimationFrame(reset);
+  const frame=requestAnimationFrame(()=>{reset();pendingAnchor.current=null});
   return()=>cancelAnimationFrame(frame);
  },[path]);
  useEffect(()=>{setOpen(false);leaving.current=false;exits.current.forEach(a=>a.cancel());exits.current=[]},[path]);
@@ -40,33 +46,39 @@ export function Shell({children}:{children:React.ReactNode}){
  useEffect(()=>()=>{exits.current.forEach(a=>a.cancel())},[]);
  async function leavePage(e:React.MouseEvent<HTMLDivElement>){
   const profile=path.startsWith('/rosters/');
-  if((!profile&&!['/','/matches','/about','/contact'].includes(path))||!active||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+  if((!profile&&!['/','/matches','/about','/contact'].includes(path))||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
   const link=(e.target as HTMLElement).closest('a');if(!link||link.target==='_blank'||link.hasAttribute('download'))return;
   const url=new URL(link.href,location.href);if(url.origin!==location.origin)return;
+  const target=link.dataset.rosterTarget||url.hash.slice(1);
   if(url.pathname===path){
-   if(!url.hash)return;
+   if(!target)return;
    let anchor:HTMLElement|null=null;
-   try{anchor=document.getElementById(decodeURIComponent(url.hash.slice(1)))}catch{}
+   try{anchor=document.getElementById(decodeURIComponent(target))}catch{}
    if(!anchor)return;
    e.preventDefault();e.stopPropagation();if(leaving.current)return;
-   if(location.hash!==url.hash){history.pushState(null,'',url.pathname+url.search+url.hash);window.dispatchEvent(new HashChangeEvent('hashchange'))}
+   try{sessionStorage.setItem('roosterz-tab',target==='academy'?'1':'0')}catch{}
+   window.dispatchEvent(new Event('roster-select'));
    const top=Math.max(0,anchor.getBoundingClientRect().top+window.scrollY-120);
    if(scrollEngine.current)scrollEngine.current.scrollTo(top,{duration:1.03,easing:(t:number)=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2});
-   else window.scrollTo({top,behavior:'smooth'});
+   else window.scrollTo({top,behavior:active?'smooth':'instant'});
    return;
   }
-  e.preventDefault();e.stopPropagation();if(leaving.current)return;leaving.current=true;setOpen(false);router.prefetch(url.pathname);
+  e.preventDefault();e.stopPropagation();if(leaving.current)return;
+  pendingAnchor.current=target||null;
+  if(target){try{sessionStorage.setItem('roosterz-tab',target==='academy'?'1':'0')}catch{}}
+  if(!active){router.push(url.pathname+url.search,{scroll:false});return}
+  leaving.current=true;setOpen(false);router.prefetch(url.pathname);
   const betweenPlayers=profile&&url.pathname.startsWith('/rosters/');
   setStaticBackPath(betweenPlayers?url.pathname:null);
   // All exit elements finish together; no invisible ease-out tail before navigation.
-  const nodes=document.querySelectorAll<HTMLElement>(path==='/'?'.cinema-center h1,.hero-emblem img,.hero-roster-link,.hero-bottom,.collection-title,.tabs,.roster-slide[aria-hidden="false"] .portrait-card':profile?'.profile-photo img,.profile-name .text-motion,.portrait-profile .back-link,.portrait-profile .next-player':'main .page-title .text-motion,main .route-copy,main .club-minimal img');
-  const animations=Array.from(nodes).filter(node=>{if(betweenPlayers&&node.matches('.back-link'))return false;const r=node.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight}).map((node,i)=>{
+  const nodes=document.querySelectorAll<HTMLElement>(path==='/'?'.cinema-center h1,.hero-emblem img,.hero-roster-link,.hero-bottom,.collection-title,.tabs,.roster-slide[aria-hidden="false"] .player-carousel':profile?'.profile-photo img,.profile-name .text-motion,.portrait-profile .back-link,.portrait-profile .next-player-label,.portrait-profile .next-player-value':'main .page-title .text-motion,main .route-copy,main .club-minimal img');
+  const animations=Array.from(nodes).filter(node=>{if(betweenPlayers&&node.matches('.back-link,.next-player-label'))return false;const r=node.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight}).map((node,i)=>{
    const style=getComputedStyle(node);
    const start={clipPath:style.clipPath==='none'?'inset(0% 0% 0% 0%)':style.clipPath,transform:style.transform==='none'?'translate(0px,0px)':style.transform};
    const name=node.matches('.text-motion');const photo=node.matches('img');
-   const duration=profile?650:550;
+   const duration=profile?780:550;
    if(path==='/'){
-    return node.animate([{clipPath:'polygon(-10% -10%,110% -10%,110% 110%,-10% 110%)'},{clipPath:'polygon(-10% -10%,-10% -10%,-10% 110%,-10% 110%)'}],{duration:560,delay:Math.min(i,3)*20,easing:'cubic-bezier(.4,0,.6,1)',fill:'forwards'});
+    return node.animate([{clipPath:'polygon(-10% -10%,110% -10%,110% 110%,-10% 110%)'},{clipPath:'polygon(-30% -10%,-30% -10%,-10% 110%,-10% 110%)'}],{duration:740,delay:Math.min(i,3)*20,easing:'cubic-bezier(.4,0,.6,1)',fill:'forwards'});
    }
    if(!profile){
     const heading=node.matches('.text-motion');
@@ -84,7 +96,7 @@ export function Shell({children}:{children:React.ReactNode}){
   // Give the fully clipped final frame a paint before replacing the route.
   await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
   setArrival(profile||url.pathname==='/'?url.pathname:null);
-  router.push(url.pathname+url.search+url.hash);
+  router.push(url.pathname+url.search,{scroll:false});
   window.setTimeout(()=>{animations.forEach(a=>a.cancel());leaving.current=false},2500);
  }
 
@@ -92,7 +104,7 @@ export function Shell({children}:{children:React.ReactNode}){
  <div className="film-grain" aria-hidden="true"/><div className="film-exposure" aria-hidden="true"/>
  <header className="header"><nav className={open?'nav open':'nav'} aria-label="Основная навигация">{nav.map(([href,label])=><Link className={path===href?'active':''} aria-current={path===href?'page':undefined} href={href} key={href}>{label}</Link>)}</nav><button className="mobile-toggle" aria-label="Открыть меню" aria-expanded={open} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></header>
  <main data-back-static={staticBackPath!==null&&path.startsWith('/rosters/')?'true':undefined} className={active&&arrival===path?'profile-arrival':undefined}>{children}</main>
- <footer className="quiet-footer"><div className="container"><Logo/></div></footer>
+
 
  </div></MotionContext.Provider>
 }
